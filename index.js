@@ -2,7 +2,10 @@ var list = [];
 var imgOverlay = []
 var rightBtn = false
 // 创建地图实例
-var map = new BMapGL.Map("container");
+var map = new BMapGL.Map("container", {
+		minZoom : 1,
+		maxZoom : 9
+	});
 // 初始化地图,设置中心点坐标和地图级别
 map.centerAndZoom(new BMapGL.Point(116.404, 39.915), 7);
 // map.centerAndZoom(new BMapGL.Point(117.200, 36.2437), 18);
