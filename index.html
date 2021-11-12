@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Hello, World</title>
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="https://api.map.baidu.com/api?v=3.0&type=webgl&ak=4s3Ybd4UDF3R07zNXfqfkimzfoiYkr5g
+">
+    </script>
+    <link href="DrawingManager/DrawingManager.css" rel="stylesheet">
+    <script type="text/javascript" src="DrawingManager/DrawingManager.js"></script>
+</head>
+
+<body>
+    <div id="container"></div>
+    <div class="dialog">
+        <div class="dialogBg"></div>
+        <div class="content">
+            <div class="header">
+                请填写
+            </div>
+            <div class="contentBody">
+                <div>
+                    <label for="#title">标题</label>
+                    <input id="title" placeholder="请填写标题"/>
+                </div>
+                <div>
+                    <label for="text">内容</label>
+                    <textarea rows="3" cols="20" id="text" placeholder="请填写标题"></textarea>
+                </div>
+            </div>
+            <div class="foot">
+                <button onclick="saveContent(this)" id="submintBtn">确定</button>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="index.js"></script>
+</body>
+</html>
