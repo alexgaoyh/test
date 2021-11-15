@@ -170,6 +170,16 @@ function mapSddEvent(obj){
     }
 }
 function saveContent(_this){
+	if($(_this).attr('type') == 'marker') {
+		var marker = new BMapGL.Marker(new BMapGL.Point($("#lng").val(), $("#lat").val()));
+		map.addOverlay(marker);
+		var sContent = "<h4>"+$("#title").val()+"</h4><h6>"+$("#text").val()+"</h6><p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + $("#lat").val() + "," +$("#lng").val()+ "</p>";
+		var infoWindow = new BMapGL.InfoWindow(sContent);
+		// marker添加点击事件
+		marker.addEventListener('click', function () {
+		    this.openInfoWindow(infoWindow);
+		});
+	}
     let obj = list.some(item=>item.uuid == $(_this).attr('data-uuid'))
     console.log(obj)
     if(obj){
@@ -242,7 +252,7 @@ function getCity(){
         // map.addOverlay(hole);
     });
 }
-getCity()
+getCity();
 map.setDisplayOptions({
     // poiText: false,  // 隐藏poi标注
     poiIcon: false,  // 隐藏poi图标
@@ -262,53 +272,93 @@ function setImg(e){
     imgOverlay.uuid = e.uuid
     console.log(imgOverlay)
     map.addOverlay(imgOverlay);
-}
+};
 
-function G(id) {
-	return document.getElementById(id);
-}
+// function G(id) {
+// 	return document.getElementById(id);
+// }
 	
-var ac = new BMapGL.Autocomplete(    //建立一个自动完成的对象
-	{"input" : "suggestId"
-	,"location" : map
+// var ac = new BMapGL.Autocomplete(    //建立一个自动完成的对象
+// 	{"input" : "suggestId"
+// 	,"location" : map
+// });
+
+// ac.addEventListener("onhighlight", function(e) {  //鼠标放在下拉列表上的事件
+// 	var str = "";
+// 	var _value = e.fromitem.value;
+// 	var value = "";
+// 	if (e.fromitem.index > -1) {
+// 		value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+// 	}    
+// 	str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+	
+// 	value = "";
+// 	if (e.toitem.index > -1) {
+// 		_value = e.toitem.value;
+// 		value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+// 	}    
+// 	str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
+// 	console.log(str);
+// 	G("searchResultPanel").innerHTML = str;
+// });
+
+// var myValue;
+// ac.addEventListener("onconfirm", function(e) {    //鼠标点击下拉列表后的事件
+// var _value = e.item.value;
+// 	myValue = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+// 	G("searchResultPanel").innerHTML ="onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+	
+// 	setPlace();
+// });
+
+// function setPlace(){
+// 	// map.clearOverlays();    //清除地图上所有覆盖物
+// 	function myFun(){
+// 		var pp = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+// 		map.centerAndZoom(pp, 18);
+// 		map.addOverlay(new BMapGL.Marker(pp));    //添加标注
+// 	}
+// 	var local = new BMapGL.LocalSearch(map, { //智能搜索
+// 	  onSearchComplete: myFun
+// 	});
+// 	local.search(myValue);
+// }
+
+$("#suggestId").bind("input propertychange",function(event){
+	   $.ajax({
+			url:"https://api.map.baidu.com/place/v2/suggestion?region=%E4%B8%AD%E5%9B%BD&output=json&callback=callback&ak=NXO0D9UthHAdoT5c3S5lwvGH&query=" + $("#suggestId").val(),
+			dataType: 'jsonp',
+			success:callback
+		});
 });
 
-ac.addEventListener("onhighlight", function(e) {  //鼠标放在下拉列表上的事件
-	var str = "";
-	var _value = e.fromitem.value;
-	var value = "";
-	if (e.fromitem.index > -1) {
-		value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
-	}    
-	str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
-	
-	value = "";
-	if (e.toitem.index > -1) {
-		_value = e.toitem.value;
-		value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
-	}    
-	str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
-	G("searchResultPanel").innerHTML = str;
-});
-
-var myValue;
-ac.addEventListener("onconfirm", function(e) {    //鼠标点击下拉列表后的事件
-var _value = e.item.value;
-	myValue = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
-	G("searchResultPanel").innerHTML ="onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
-	
-	setPlace();
-});
-
-function setPlace(){
-	// map.clearOverlays();    //清除地图上所有覆盖物
-	function myFun(){
-		var pp = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
-		map.centerAndZoom(pp, 18);
-		map.addOverlay(new BMapGL.Marker(pp));    //添加标注
+//自定义回调函数
+function callback(rs) {
+	$("#searchResultPanel").attr("style","display:block;");//显示div
+	if(rs.message === 'ok' && rs.status == 0) {
+		$("#searchResultPanel").html('');
+		var html = '<div>';
+		var array = rs.result;
+		for(var i = 0; i < array.length; i++) {
+			
+			html = html + "<div class='suggestDiv' onclick=divDialogClick('"+array[i].uid+"','"+array[i].name+"','"+array[i].location.lat+"','"+array[i].location.lng+"')>";
+			html = html + '<li>名称：'+array[i].name+'</li>';
+			html = html + '<li>经纬度：'+array[i].location.lat + ',' + array[i].location.lng +'</li>';
+			html = html + '<li>地区：'+array[i].province + array[i].city + array[i].city + array[i].district + array[i].address + '</li>';
+			html = html + '</div>';
+		}
+		html = html + '</div>';
+		$("#searchResultPanel").append(html);
+	    $("#searchResultPanel").attr("style","display:block;");//显示div
 	}
-	var local = new BMapGL.LocalSearch(map, { //智能搜索
-	  onSearchComplete: myFun
-	});
-	local.search(myValue);
+}
+
+function divDialogClick(uid, name, lat, lng) {
+	$('#submintBtn').attr('data-uuid',uid);
+	$('#submintBtn').attr('type','marker');
+	$("#title").val(name);
+	$("#lat").val(lat);
+	$("#lng").val(lng);
+	$('.dialog').attr('style','display:block;')
+	$("#searchResultPanel").attr("style","display:none;");
 }
