@@ -171,7 +171,8 @@ function mapSddEvent(obj){
 }
 function saveContent(_this){
 	if($(_this).attr('type') == 'marker') {
-		var marker = new BMapGL.Marker(new BMapGL.Point($("#lng").val(), $("#lat").val()));
+		var myIcon = new BMapGL.Icon("maintain.svg", new BMapGL.Size(50, 50));
+		var marker = new BMapGL.Marker(new BMapGL.Point($("#lng").val(), $("#lat").val()),{icon:myIcon});
 		map.addOverlay(marker);
 		var sContent = "<h4>"+$("#title").val()+"</h4><h6>"+$("#text").val()+"</h6><p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + $("#lat").val() + "," +$("#lng").val()+ "</p><p style='margin:2;line-height:1.5;font-size:13px;text-indent:2em'>点击下载:下载地址(暂不可用)</p>";
 		var infoWindow = new BMapGL.InfoWindow(sContent);
