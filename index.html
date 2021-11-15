@@ -28,6 +28,9 @@
 		.tangram-suggestion-main {
 			z-index: 10000;
 		}
+		.suggestDiv {
+			border:5px solid #C0C0C0;
+		}
 	</style>
     <link rel="stylesheet" type="text/css" href="index.css">
     <script type="text/javascript" src="jquery.js"></script>
@@ -43,9 +46,11 @@
 	<div id="r-result" >
 		<div>1、如上选择工具可用，其中矩形选择会覆盖图片；
 		<div>2、如下输入框选择地址，会在地图上标注，并覆盖在自定义图层上；</div>
-		
 		请输入:<input type="text" id="suggestId" size="20" value="" style="width:150px;"  placeholder="请输入类似石家庄" />
-		<div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
+		<div id="searchResultPanel" style="display:none;">
+			
+		</div>
+		<!-- https://api.map.baidu.com/place/v2/suggestion?query=%E5%A4%A9%E5%AE%89%E9%97%A8&region=%E4%B8%AD%E5%9B%BDe&output=json&ak=NXO0D9UthHAdoT5c3S5lwvGH -->
 	</div>
     <div class="dialog">
         <div class="dialogBg"></div>
@@ -62,6 +67,14 @@
                     <label for="text">内容</label>
                     <textarea rows="3" cols="20" id="text" placeholder="请填写标题"></textarea>
                 </div>
+				<div>
+				    <label for="text">经纬度1</label>
+                    <input id="lat" placeholder="请填写经纬度1"/>
+				</div>
+				<div>
+				    <label for="text">经纬度2</label>
+				    <input id="lng" placeholder="请填写经纬度2"/>
+				</div>
             </div>
             <div class="foot">
                 <button onclick="saveContent(this)" id="submintBtn">确定</button>
