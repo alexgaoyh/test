@@ -174,7 +174,7 @@ function saveContent(_this){
 		var myIcon = new BMapGL.Icon($("#icon").val(), new BMapGL.Size(50, 50));
 		var marker = new BMapGL.Marker(new BMapGL.Point($("#lng").val(), $("#lat").val()),{icon:myIcon});
 		map.addOverlay(marker);
-		var sContent = "<h4>"+$("#title").val()+"</h4><h6>"+$("#text").val()+"</h6><p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + $("#lat").val() + "," +$("#lng").val()+ "</p><p style='margin:2;line-height:1.5;font-size:13px;text-indent:2em'>点击下载:下载地址(暂不可用)</p>";
+		var sContent = "<h4><button onclick=delMarker('"+$("#lng").val()+"','"+$("#lat").val()+"')>点击删除当前标注</button></h4><h4>"+$("#title").val()+"</h4><h6>"+$("#text").val()+"</h6><p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + $("#lat").val() + "," +$("#lng").val()+ "</p><p style='margin:2;line-height:1.5;font-size:13px;text-indent:2em'>点击下载:下载地址(暂不可用)</p>";
 		var infoWindow = new BMapGL.InfoWindow(sContent);
 		// marker添加点击事件
 		marker.addEventListener('click', function () {
@@ -362,4 +362,16 @@ function divDialogClick(uid, name, lat, lng) {
 	$("#lng").val(lng);
 	$('.dialog').attr('style','display:block;')
 	$("#searchResultPanel").attr("style","display:none;");
+}
+
+function delMarker(lng, lat) {
+	console.log(lng, lat);
+	var allOverlay = map.getOverlays();
+	for(var i = 0;i<allOverlay.length;i++) {
+		if(allOverlay[i].toString()=="Marker"){
+			if (allOverlay[i].getPosition().lng.toFixed(6) == lng && allOverlay[i].getPosition().lat.toFixed(6) == lat) {
+				map.removeOverlay(allOverlay[i]);
+			}
+		}
+	}
 }
