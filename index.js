@@ -72,7 +72,20 @@ drawingManager.addEventListener('overlaycomplete', function(e) {
         setImg(e)
     }
     if(e.drawingMode == 'polygon'){
-        // setotherImg(e)
+        // var pointArray = new Array();//保存坐标数据
+        // for(var i = 0; i < e.overlay.points.length - 1; i++) {
+        //     var dataPoint = new BMapGL.Point(e.overlay.points[i].latLng.lng, e.overlay.points[i].latLng.lat);
+        //     pointArray.push(dataPoint);
+        // }
+        // var polygon = new BMapGL.Polygon(pointArray,{
+        //     strokeWeight: 0.5,
+        //     strokeColor: "blue",
+        //     fillColor: "blue"
+        // }); //建立多边形覆盖物
+        // polygon.setFillOpacity(0.3);
+        // polygon.disableMassClear();// 禁止清除操作
+        // polygon.setZIndex(999999);
+        // map.addOverlay(polygon); // 绘制多边形覆盖物
     }
 });
 function mapSddEvent(obj){
@@ -267,7 +280,7 @@ function setImg(e){
     var bounds = new BMapGL.Bounds(new BMapGL.Point(pStart.lng, pEnd.lat), new BMapGL.Point(pEnd.lng, pStart.lat));
     var imgOverlay = new BMapGL.GroundOverlay(bounds, {
         type: 'image',
-        url: './123.jpg',
+        url: './30percent.png',
         opacity: 1
     });
     imgOverlay.uuid = e.uuid
@@ -374,4 +387,33 @@ function delMarker(lng, lat) {
 			}
 		}
 	}
+}
+
+function onProvince(selectProvince) {
+    var value = selectProvince.value;
+    console.log(value);
+    getBoundaryAdd(value);
+}
+
+// 全局记录省份边界点，为了后续移除使用
+var provinceBoundary = [];
+
+function getBoundaryAdd(name){
+    var bdary = new BMapGL.Boundary();
+    bdary.get(name, function(rs){       //获取行政区域
+        var count = rs.boundaries.length; //行政区域的点有多少个
+        for(var i = 0; i < count; i++){
+            var ply = new BMapGL.Polygon(rs.boundaries[i], {strokeWeight: 2, strokeColor: "#ff0000"}); //建立多边形覆盖物
+            provinceBoundary.push(ply);
+            map.addOverlay(ply);  //添加覆盖物
+            map.setViewport(ply.getPath());    //调整视野
+        }
+    });
+}
+
+function getBoundaryRemove(){
+    for(var i = 0; i < provinceBoundary.length; i++){
+        map.removeOverlay(provinceBoundary[i]);
+    }
+    provinceBoundary = [];
 }

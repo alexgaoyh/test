@@ -47,6 +47,14 @@
 		<div>1、如上选择工具可用，其中矩形选择会覆盖图片；
 		<div>2、如下输入框选择地址，会在地图上标注，并覆盖在自定义图层上；</div>
 		<div>3、如下输入框选择地址，在弹出层点击匹配出来的信息，输入标注信息进行标注；</div>
+        <div>
+            4、添加百度地图省份轮廓
+            <select id="province" onchange="onProvince(this)">
+                <option value ="河南省">河南省</option>
+                <option value ="河北省">河北省</option>
+            </select>
+            <button onclick="getBoundaryRemove()">移除百度地图省份边界</button>
+        </div>
 		请输入:<input type="text" id="suggestId" size="20" value="" style="width:200px;"  placeholder="请输入类似石家庄,点击弹层并进行标注" />
 		<div id="searchResultPanel" style="display:none;">
 			
