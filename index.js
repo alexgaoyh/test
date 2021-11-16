@@ -68,6 +68,24 @@ drawingManager.addEventListener('overlaycomplete', function(e) {
     e.uuid = new Date().getTime()
     mapSddEvent(e)
     console.log(e.drawingMode)
+    if(e.drawingMode == 'marker'){
+        // 获取经纬度，弹层，删除
+        console.log(e)
+        var allOverlay = map.getOverlays();
+        for(var i = 0;i<allOverlay.length;i++) {
+            if(allOverlay[i].toString()=="Marker"){
+                if (allOverlay[i].getPosition().lng == e.overlay.latLng.lng && allOverlay[i].getPosition().lat == e.overlay.latLng.lat) {
+                    map.removeOverlay(allOverlay[i]);
+                }
+            }
+        }
+        $('#submintBtn').attr('data-uuid',e.uuid);
+        $('#submintBtn').attr('type','marker');
+        $("#lat").val(e.overlay.latLng.lat);
+        $("#lng").val(e.overlay.latLng.lng);
+        $('.dialog').attr('style','display:block;')
+
+    }
     if(e.drawingMode == 'rectangle'){
         setImg(e)
     }
@@ -382,7 +400,7 @@ function delMarker(lng, lat) {
 	var allOverlay = map.getOverlays();
 	for(var i = 0;i<allOverlay.length;i++) {
 		if(allOverlay[i].toString()=="Marker"){
-			if (allOverlay[i].getPosition().lng.toFixed(6) == lng && allOverlay[i].getPosition().lat.toFixed(6) == lat) {
+			if (allOverlay[i].getPosition().lng.toFixed(6) == Number(lng).toFixed(6) && allOverlay[i].getPosition().lat.toFixed(6) == Number(lat).toFixed(6)) {
 				map.removeOverlay(allOverlay[i]);
 			}
 		}
