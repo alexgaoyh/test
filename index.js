@@ -89,7 +89,7 @@ drawingManager.addEventListener('overlaycomplete', function(e) {
     if(e.drawingMode == 'rectangle'){
         setImg(e)
     }
-    if(e.drawingMode == 'polygon'){
+    if(e.drawingMode == 'polygon' || e.drawingMode == 'circle'){
         // var pointArray = new Array();//保存坐标数据
         // for(var i = 0; i < e.overlay.points.length - 1; i++) {
         //     var dataPoint = new BMapGL.Point(e.overlay.points[i].latLng.lng, e.overlay.points[i].latLng.lat);
