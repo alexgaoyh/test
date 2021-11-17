@@ -104,11 +104,12 @@ drawingManager.addEventListener('overlaycomplete', function(e) {
         // polygon.disableMassClear();// 禁止清除操作
         // polygon.setZIndex(999999);
         // map.addOverlay(polygon); // 绘制多边形覆盖物
+        var uuid = e.uuid;
         var pointStrs = '';//保存坐标数据
         for(var i = 0; i < e.overlay.points.length - 1; i++) {
             pointStrs = pointStrs + e.overlay.points[i].latLng.lng + ',' + e.overlay.points[i].latLng.lat + ';'
         }
-        $.get("http://127.0.0.1:30000/geo2image?uuid="+e.uuid+"&pois=" + pointStrs, function(result){
+        $.get("http://127.0.0.1:30000/geo2image?uuid="+uuid+"&pois=" + pointStrs, function(result){
             var pStart = new BMapGL.Point(result.result.minY,result.result.minX);
             var pEnd = new BMapGL.Point(result.result.maxY,result.result.maxX);
             var bounds = new BMapGL.Bounds(new BMapGL.Point(pStart.lng, pEnd.lat), new BMapGL.Point(pEnd.lng, pStart.lat));
@@ -117,6 +118,7 @@ drawingManager.addEventListener('overlaycomplete', function(e) {
                 url: result.result.fileUrl,
                 opacity: 0.5
             });
+            imgOverlay.uuid = uuid
             map.addOverlay(imgOverlay);
         });
     }
